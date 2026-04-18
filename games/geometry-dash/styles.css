@@ -1,0 +1,316 @@
+:root {
+  --bg-top: #08111c;
+  --bg-mid: #102248;
+  --bg-bottom: #1b355d;
+  --panel: rgba(5, 11, 20, 0.76);
+  --panel-strong: rgba(7, 15, 30, 0.92);
+  --grid: rgba(164, 220, 255, 0.12);
+  --text: #eff8ff;
+  --muted: #b8c6dd;
+  --mint: #79f5df;
+  --cyan: #47d8ff;
+  --gold: #ffd36e;
+  --coral: #ff7f6e;
+  --line: rgba(156, 218, 255, 0.24);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(71, 216, 255, 0.18), transparent 26%),
+    radial-gradient(circle at 20% 80%, rgba(255, 211, 110, 0.16), transparent 25%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-mid) 52%, var(--bg-bottom));
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+.portal-topbar {
+  margin-bottom: 18px;
+}
+
+.portal-return-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(7, 15, 30, 0.82);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+.portal-return-link:hover,
+.portal-return-link:focus-visible {
+  background: rgba(10, 22, 42, 0.94);
+  outline: none;
+}
+
+.hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.hero-copy {
+  max-width: 640px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--mint);
+  font-size: 0.78rem;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Arial Black", "Trebuchet MS", sans-serif;
+  font-size: clamp(2.6rem, 5vw, 4.5rem);
+  letter-spacing: 0.04em;
+  line-height: 0.92;
+}
+
+.lede {
+  max-width: 54ch;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 10px;
+}
+
+.hero-badges span,
+.hud-stats span {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+  padding: 10px 14px;
+  backdrop-filter: blur(12px);
+}
+
+.game-shell {
+  position: relative;
+  padding: 16px;
+  border: 1px solid rgba(158, 222, 255, 0.22);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 24%),
+    linear-gradient(160deg, rgba(121, 245, 223, 0.08), transparent 32%),
+    var(--panel);
+  box-shadow:
+    0 28px 80px rgba(2, 6, 16, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.hud-bar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 16px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, var(--mint), var(--cyan) 55%, var(--gold));
+  box-shadow: 0 0 24px rgba(121, 245, 223, 0.42);
+  transition: width 160ms linear;
+}
+
+.hud-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.canvas-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(159, 221, 255, 0.22);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 30%),
+    linear-gradient(180deg, rgba(7, 14, 26, 0.8), rgba(3, 10, 22, 0.98));
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 72vh;
+  touch-action: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(5, 10, 18, 0.28), rgba(5, 10, 18, 0.7));
+  transition: opacity 180ms ease;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay-card {
+  width: min(420px, calc(100% - 28px));
+  padding: 24px;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 30%),
+    var(--panel-strong);
+  border: 1px solid rgba(160, 225, 255, 0.2);
+  text-align: center;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.34);
+}
+
+.overlay-tag {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--mint);
+  font-size: 0.76rem;
+}
+
+.overlay-card h2 {
+  margin: 0 0 10px;
+  font-family: "Arial Black", "Trebuchet MS", sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.04em;
+}
+
+.overlay-card p {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.overlay-card button,
+.mobile-controls button {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 18px;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #06202a;
+  background: linear-gradient(135deg, var(--gold), var(--mint));
+  box-shadow: 0 18px 36px rgba(121, 245, 223, 0.28);
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.overlay-card button {
+  margin-top: 18px;
+}
+
+.overlay-card button:hover,
+.mobile-controls button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 42px rgba(121, 245, 223, 0.34);
+}
+
+.mobile-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.mobile-controls button {
+  flex: 1;
+  touch-action: manipulation;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .hero-badges {
+    justify-content: start;
+  }
+
+  .hud-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 640px) {
+  .shell {
+    width: min(100% - 18px, 1180px);
+    padding-top: 18px;
+  }
+
+  .game-shell {
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .overlay-card {
+    padding: 20px;
+  }
+
+  .hero-badges span,
+  .hud-stats span {
+    width: 100%;
+    text-align: center;
+  }
+}

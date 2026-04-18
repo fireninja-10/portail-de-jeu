@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>Roulette Retro</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="game.js" defer></script>
+  </head>
+  <body>
+    <div class="screen-noise" aria-hidden="true"></div>
+    <main class="app">
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+      </nav>
+      <section class="hero card">
+        <div class="hero-copy">
+          <p class="eyebrow">Arcade Casino / 1987</p>
+          <h1>Roulette Retro</h1>
+          <p class="lede">
+            Pose tes jetons, lance la roue et essaye d'attraper le numero
+            gagnant dans une ambiance neon inspiree des salles d'arcade.
+          </p>
+        </div>
+
+        <div class="stats" aria-label="tableau de bord">
+          <article class="stat">
+            <span>Solde</span>
+            <strong id="balanceValue">0</strong>
+          </article>
+          <article class="stat">
+            <span>Mise totale</span>
+            <strong id="stakeValue">0</strong>
+          </article>
+          <article class="stat">
+            <span>Dernier gain</span>
+            <strong id="gainValue">0</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="layout">
+        <article class="card wheel-card">
+          <div class="wheel-shell">
+            <div class="wheel-pointer" aria-hidden="true"></div>
+            <div class="wheel-rotor" id="wheelRotor">
+              <svg
+                id="wheelSvg"
+                viewBox="0 0 400 400"
+                role="img"
+                aria-label="Roue de roulette"
+              ></svg>
+            </div>
+          </div>
+
+          <div class="result-strip" aria-live="polite">
+            <div>
+              <span class="section-label">Resultat</span>
+              <strong id="resultText">Pret a jouer</strong>
+            </div>
+            <div class="result-chip" id="resultChip">--</div>
+          </div>
+        </article>
+
+        <aside class="card side-panel">
+          <div>
+            <div class="section-label">Jetons</div>
+            <div class="chip-set" id="chipSet" aria-label="selection de jetons"></div>
+          </div>
+
+          <div class="actions">
+            <button id="spinBtn" class="action-btn primary" type="button">
+              Lancer
+            </button>
+            <button id="undoBtn" class="action-btn" type="button">
+              Annuler
+            </button>
+            <button id="clearBtn" class="action-btn" type="button">
+              Tout effacer
+            </button>
+          </div>
+
+          <section class="info-box">
+            <div class="section-label">Comment jouer</div>
+            <ol>
+              <li>Choisis un jeton.</li>
+              <li>Clique sur un numero ou un pari.</li>
+              <li>Lance la roue et tente de battre la table.</li>
+            </ol>
+          </section>
+
+          <section class="history-box">
+            <div class="section-label">Historique</div>
+            <ul id="historyList" class="history-list" aria-live="polite"></ul>
+          </section>
+        </aside>
+      </section>
+
+      <section class="card betting-card">
+        <div class="board-header">
+          <div>
+            <div class="section-label">Table de paris</div>
+            <h2>Le tapis de casino en mode retro</h2>
+          </div>
+          <p>
+            Le tableau suit les couleurs classiques: rouge, noir et vert pour le
+            zero.
+          </p>
+        </div>
+
+        <div class="roulette-grid-wrap">
+          <div class="roulette-grid" id="rouletteGrid" aria-label="table de roulette"></div>
+        </div>
+
+        <div class="bet-groups">
+          <section class="bet-group">
+            <div class="group-title">Paris exterieurs</div>
+            <div class="option-grid" id="outsideGrid"></div>
+          </section>
+
+          <section class="bet-group">
+            <div class="group-title">Douzaines</div>
+            <div class="option-grid compact" id="dozenGrid"></div>
+          </section>
+        </div>
+
+        <section class="bet-slip">
+          <div class="group-title">Tes paris en cours</div>
+          <div id="slipList" class="slip-list"></div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

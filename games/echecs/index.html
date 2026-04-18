@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Échecs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-background-ambient" aria-hidden="true">
+      <div class="ambient-orb ambient-orb-left"></div>
+      <div class="ambient-orb ambient-orb-right"></div>
+      <div class="ambient-sun"></div>
+      <div class="ambient-grid-plane"></div>
+      <div class="ambient-beams"></div>
+    </div>
+
+    <main class="app-shell">
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+      </nav>
+      <div class="top-bar">
+        <section class="hero-card">
+          <p class="eyebrow">Jeu autonome</p>
+          <h1>Échecs</h1>
+          <p class="hero-copy">
+            Un jeu d'echecs jouable a deux sur le meme ecran, avec roque, prise en
+            passant, promotion, historique et remise a zero.
+          </p>
+        </section>
+
+        <div class="top-actions">
+          <div class="top-action-row">
+            <button id="customizationButton" class="top-action-button" type="button">
+              Customisation
+            </button>
+            <button id="fullscreenButton" class="top-action-button fullscreen-button" type="button">
+              Plein ecran
+            </button>
+          </div>
+
+          <section id="customizationPanel" class="customization-panel" hidden>
+            <div class="customization-panel-head">
+              <div>
+                <p class="panel-label">Customisation</p>
+                <h2 class="customization-title">Fond d'ecran et plateau</h2>
+              </div>
+              <button id="closeCustomizationButton" class="overlay-close-button" type="button">
+                Fermer
+              </button>
+            </div>
+
+            <div class="customization-section">
+              <div class="customization-section-head">
+                <p class="panel-label">Choisis une ambiance</p>
+              </div>
+              <div id="backgroundThemeList" class="customization-grid"></div>
+            </div>
+
+            <div class="customization-section">
+              <div class="customization-section-head">
+                <p class="panel-label">Plateau</p>
+              </div>
+              <div id="boardThemeList" class="customization-grid"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <section class="game-layout">
+        <div class="board-panel">
+          <div class="board-frame">
+            <div id="board" class="board" aria-label="Plateau d'echecs"></div>
+          </div>
+        </div>
+
+        <aside class="side-panel">
+          <section class="status-card">
+            <div class="status-head">
+              <p class="panel-label">Etat de la partie</p>
+              <div id="turnBadge" class="turn-badge"></div>
+            </div>
+            <p id="statusText" class="status-text"></p>
+            <p id="selectionText" class="selection-text"></p>
+          </section>
+
+          <div class="control-stack">
+            <section class="control-card">
+              <p class="panel-label">Commandes</p>
+              <div class="button-row">
+                <button id="newGameButton" class="action-button primary" type="button">
+                  Nouvelle partie
+                </button>
+                <button id="undoButton" class="action-button" type="button">
+                  Annuler
+                </button>
+              </div>
+              <button id="randomTeamsButton" class="action-button wide" type="button">
+                Random teams
+              </button>
+            </section>
+
+            <section id="newGameMenu" class="new-game-menu-card" hidden>
+              <div class="new-game-menu-head">
+                <p class="panel-label">Nouvelle partie</p>
+                <button id="closeNewGameMenuButton" class="overlay-close-button" type="button">
+                  Fermer
+                </button>
+              </div>
+              <div class="new-game-choice-grid">
+                <button id="startSingleplayerButton" class="mode-choice-card" type="button">
+                  <span class="mode-choice-title">Singleplayer</span>
+                  <span class="mode-choice-copy">Ouvre la liste des 8 IA et leurs niveaux.</span>
+                </button>
+                <button id="openMultiplayerButton" class="mode-choice-card" type="button">
+                  <span class="mode-choice-title">Multiplayer</span>
+                  <span class="mode-choice-copy">Lance le jeu local a deux sans IA.</span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <section class="capture-card">
+            <p class="panel-label">Pieces capturees</p>
+            <div class="capture-group">
+              <span class="capture-title">Blancs</span>
+              <div id="capturedByWhite" class="capture-strip"></div>
+            </div>
+            <div class="capture-group">
+              <span class="capture-title">Noirs</span>
+              <div id="capturedByBlack" class="capture-strip"></div>
+            </div>
+          </section>
+
+          <section class="history-card">
+            <div class="history-head">
+              <p class="panel-label">Historique</p>
+              <span id="moveCount" class="move-count"></span>
+            </div>
+            <div id="moveHistory" class="move-history"></div>
+          </section>
+
+          <section id="aiMenuPanel" class="ai-menu-panel" hidden>
+            <div class="ai-menu-head">
+              <div>
+                <p class="panel-label">Selection IA</p>
+                <h2 class="ai-menu-title">Choisis un niveau</h2>
+              </div>
+              <button id="closeAiMenuButton" class="overlay-close-button" type="button">
+                Retour
+              </button>
+            </div>
+            <div id="aiDifficultyList" class="ai-difficulty-list"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <div id="promotionDialog" class="promotion-dialog" hidden>
+      <div class="promotion-card" role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+        <p class="panel-label">Promotion</p>
+        <h2 id="promotionTitle">Choisis une piece</h2>
+        <div class="promotion-grid">
+          <button class="promotion-option" type="button" data-piece="q">
+            <span class="promotion-token">Q</span>
+            <span class="promotion-label">Reine</span>
+          </button>
+          <button class="promotion-option" type="button" data-piece="r">
+            <span class="promotion-token">R</span>
+            <span class="promotion-label">Tour</span>
+          </button>
+          <button class="promotion-option" type="button" data-piece="b">
+            <span class="promotion-token">B</span>
+            <span class="promotion-label">Fou</span>
+          </button>
+          <button class="promotion-option" type="button" data-piece="n">
+            <span class="promotion-token">N</span>
+            <span class="promotion-label">Cavalier</span>
+          </button>
+        </div>
+        <button id="cancelPromotionButton" class="action-button wide" type="button">
+          Revenir au plateau
+        </button>
+      </div>
+    </div>
+
+    <div id="endgameDialog" class="endgame-dialog" hidden>
+      <div class="endgame-bubble" role="dialog" aria-modal="true" aria-labelledby="endgameTitle">
+        <p class="panel-label">Fin de partie</p>
+        <h2 id="endgameTitle"></h2>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

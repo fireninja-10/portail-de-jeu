@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flappy Bird</title>
+    <meta
+      name="description"
+      content="Un petit Flappy Bird jouable dans le navigateur, avec score et restart."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+      </nav>
+      <header class="hero">
+        <p class="eyebrow">Arcade classique</p>
+        <h1>Flappy Bird</h1>
+        <p class="subtitle">
+          Appuie sur espace, clique ou tape pour faire voler l'oiseau entre les tuyaux.
+        </p>
+      </header>
+
+      <section class="arena" aria-label="Jeu Flappy Bird et tableau de scores">
+        <aside class="hud-panel hud-panel--score" aria-live="polite">
+          <p class="hud-label">Score</p>
+          <strong id="score" class="hud-value">0</strong>
+          <p class="hud-note">Chaque tuyau franchi ajoute un point.</p>
+        </aside>
+
+        <section class="game-shell" aria-label="Jeu Flappy Bird">
+          <canvas id="game" aria-label="Flappy Bird"></canvas>
+
+          <div class="overlay is-visible" id="overlay">
+            <div class="overlay-card">
+              <p class="overlay-kicker" id="overlay-kicker">Prêt ?</p>
+              <h2 id="overlay-title">Flappy Bird</h2>
+              <p id="overlay-text">
+                Appuie sur espace, clique ou tape pour démarrer.
+              </p>
+              <button id="play-button" type="button">Jouer</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="hud-panel hud-panel--best" aria-live="polite">
+          <p class="hud-label">Meilleur score</p>
+          <strong id="best" class="hud-value">0</strong>
+          <p class="hud-note">Le record reste sauvegardé sur cet appareil.</p>
+        </aside>
+      </section>
+
+      <p class="controls">
+        Espace / flèche haut / clic / tap = battre des ailes. R = recommencer.
+      </p>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>

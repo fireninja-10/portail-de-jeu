@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tetris Neon</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+      </nav>
+      <section class="title-panel">
+        <p class="eyebrow">Jeu navigateur</p>
+        <h1>Tetris Neon</h1>
+        <p class="subtitle">
+          Empile, pivote et survie le plus longtemps possible.
+        </p>
+      </section>
+
+      <section class="playground" aria-label="Zone de jeu Tetris">
+        <aside class="sidebar">
+          <div class="panel stat-panel">
+            <h2>Score</h2>
+            <div class="stat-grid">
+              <div>
+                <span class="label">Points</span>
+                <strong id="score">0</strong>
+              </div>
+              <div>
+                <span class="label">Lignes</span>
+                <strong id="lines">0</strong>
+              </div>
+              <div>
+                <span class="label">Niveau</span>
+                <strong id="level">1</strong>
+              </div>
+              <div>
+                <span class="label">Temps</span>
+                <strong id="time">00:00</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel preview-panel">
+            <h2>Suivante</h2>
+            <canvas id="next-canvas" width="160" height="160"></canvas>
+          </div>
+
+          <div class="panel preview-panel">
+            <h2>Réserve</h2>
+            <canvas id="hold-canvas" width="160" height="160"></canvas>
+          </div>
+        </aside>
+
+        <section class="board-wrap">
+          <div class="board-frame">
+            <canvas
+              id="board"
+              width="320"
+              height="640"
+              aria-label="Plateau Tetris"
+            ></canvas>
+            <div class="overlay" id="overlay">
+              <div class="overlay-card">
+                <p class="overlay-tag">Prêt ?</p>
+                <h2 id="overlay-title">Appuie sur Jouer</h2>
+                <p id="overlay-text">
+                  Déplace les pièces, nettoie les lignes et vise le meilleur score.
+                </p>
+                <button id="start-button" type="button">Jouer</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="sidebar info-sidebar">
+          <div class="panel controls-panel">
+            <h2>Commandes</h2>
+            <ul>
+              <li><kbd>←</kbd> <kbd>→</kbd> ou <kbd>A</kbd> <kbd>D</kbd> déplacer</li>
+              <li><kbd>↓</kbd> ou <kbd>S</kbd> chute lente</li>
+              <li><kbd>↑</kbd> ou <kbd>W</kbd> ou <kbd>X</kbd> rotation</li>
+              <li><kbd>Z</kbd> rotation inverse</li>
+              <li><kbd>Espace</kbd> chute rapide</li>
+              <li><kbd>C</kbd> garder la pièce</li>
+              <li><kbd>P</kbd> pause</li>
+            </ul>
+          </div>
+
+          <div class="panel tips-panel">
+            <h2>Objectif</h2>
+            <p>
+              Fais disparaître des lignes complètes pour accélérer la partie et
+              monter en niveau.
+            </p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="touch-controls" aria-label="Contrôles tactiles">
+        <button type="button" data-action="hold">Hold</button>
+        <button type="button" data-action="rotate-ccw">↺</button>
+        <button type="button" data-action="left">←</button>
+        <button type="button" data-action="down">↓</button>
+        <button type="button" data-action="right">→</button>
+        <button type="button" data-action="rotate">↻</button>
+        <button type="button" data-action="drop">Drop</button>
+        <button type="button" data-action="pause">Pause</button>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>

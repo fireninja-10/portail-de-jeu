@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air Hockey Neon</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="backdrop-grid" aria-hidden="true"></div>
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+      </nav>
+
+      <header class="topbar">
+        <div class="brand-block">
+          <span class="eyebrow">Retro Arcade</span>
+          <h1>Air Hockey Neon</h1>
+          <p class="tagline">Duel synthwave, rebonds lumineux et pression maximale.</p>
+        </div>
+      </header>
+
+      <main class="game-panel">
+        <div class="status-row">
+          <p id="status-text">Clique ou touche l’arène pour lancer le face-off horizontal.</p>
+          <div class="status-actions">
+            <button id="mode-toggle" class="ghost-button" type="button" aria-pressed="false">
+              Mode: Solo
+            </button>
+            <button id="sound-toggle" class="ghost-button" type="button" aria-pressed="false">
+              Son: ON
+            </button>
+          </div>
+        </div>
+
+        <div class="play-stage">
+          <aside class="scoreboard scoreboard-side scoreboard-side-left" aria-label="Score joueur">
+            <span id="left-label" class="score-label">JOUEUR</span>
+            <strong id="player-score">0</strong>
+          </aside>
+
+          <div class="arena-frame">
+            <div class="arena-glow" aria-hidden="true"></div>
+            <canvas
+              id="game"
+              width="1200"
+              height="900"
+              aria-label="Jeu de air hockey rétro horizontal"
+            ></canvas>
+            <div class="scanlines" aria-hidden="true"></div>
+          </div>
+
+          <aside class="scoreboard scoreboard-side scoreboard-side-right" aria-label="Score adverse">
+            <span id="right-label" class="score-label">CPU</span>
+            <strong id="cpu-score">0</strong>
+          </aside>
+        </div>
+
+        <div class="controls-row">
+          <button id="start-button" class="primary-button" type="button">Nouvelle partie</button>
+          <p>
+            Solo: WASD ou flèches pour toi. Multi: WASD pour J1, flèches pour J2.
+          </p>
+        </div>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon Dash Platformer</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+      </nav>
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Arcade platformer</p>
+          <h1>Neon Dash</h1>
+          <p class="lede">
+            Un jeu de plateforme nerveux inspire de Geometry Dash : tu fonces,
+            tu sautes, tu evites les pics et tu cherches le clear parfait.
+          </p>
+        </div>
+        <div class="hero-badges">
+          <span>Espace / Fleche haut / Clic</span>
+          <span>R pour recommencer</span>
+          <span>Tactile inclus</span>
+        </div>
+      </header>
+
+      <main class="game-shell">
+        <div class="hud-bar">
+          <div class="progress-track" aria-label="Progression du niveau">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="hud-stats">
+            <span id="attemptLabel">Tentative 1</span>
+            <span id="statusLabel">Pret</span>
+            <span id="percentLabel">0%</span>
+          </div>
+        </div>
+
+        <div class="canvas-frame">
+          <canvas id="game" width="960" height="540" aria-label="Jeu Neon Dash"></canvas>
+
+          <div class="overlay" id="overlay">
+            <div class="overlay-card">
+              <p class="overlay-tag" id="overlayTag">Niveau demo</p>
+              <h2 id="overlayTitle">Neon Dash</h2>
+              <p id="overlayBody">
+                Clique, touche ou appuie sur Espace pour lancer la course.
+              </p>
+              <button type="button" id="overlayButton">Jouer</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mobile-controls">
+          <button type="button" id="jumpButton">Saut</button>
+          <button type="button" id="restartButton">Reset</button>
+        </div>
+      </main>
+    </div>
+
+    <script src="./game.js"></script>
+  </body>
+</html>

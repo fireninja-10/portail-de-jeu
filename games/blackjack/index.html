@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0f1f" />
+    <title>Blackjack Rétro</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="game.js" defer></script>
+  </head>
+  <body>
+    <main class="scene">
+      <section class="cabinet" aria-label="Jeu de blackjack rétro">
+        <nav class="portal-topbar" aria-label="Navigation du portail">
+          <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+        </nav>
+        <header class="hero">
+          <div class="hero__badge">ARCADE // 1987</div>
+          <h1>Blackjack Rétro</h1>
+          <p>
+            Fais 21 sans faire sauter la machine. Les mises, les cartes et les
+            néons sont prêts.
+          </p>
+        </header>
+
+        <section class="hud" aria-label="Statistiques">
+          <article class="stat">
+            <span>Crédits</span>
+            <strong id="bankroll">1 000</strong>
+          </article>
+          <article class="stat">
+            <span>Manches</span>
+            <strong id="rounds">0</strong>
+          </article>
+          <article class="stat">
+            <span>Victoires</span>
+            <strong id="wins">0</strong>
+          </article>
+          <article class="stat">
+            <span>Défaites</span>
+            <strong id="losses">0</strong>
+          </article>
+          <article class="stat">
+            <span>Égalités</span>
+            <strong id="pushes">0</strong>
+          </article>
+        </section>
+
+        <section class="table" aria-label="Table de jeu">
+          <div class="board-row board-row--dealer">
+            <div class="board-row__meta">
+              <p class="section-label">Croupier</p>
+              <div class="total" id="dealer-total">??</div>
+            </div>
+            <div class="hand" id="dealer-hand" aria-live="polite"></div>
+          </div>
+
+          <div class="table__divider" aria-hidden="true"></div>
+
+          <div class="board-row board-row--player">
+            <div class="board-row__meta">
+              <p class="section-label">Joueur</p>
+              <div class="total" id="player-total">0</div>
+            </div>
+            <div class="hand" id="player-hand" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <div id="message" class="message" aria-live="polite">
+          Prêt pour la première donne.
+        </div>
+
+        <section class="controls" aria-label="Contrôles">
+          <label class="bet">
+            <span>Mise</span>
+            <div class="bet__row">
+              <input
+                id="bet-input"
+                type="number"
+                min="10"
+                step="1"
+                value="50"
+                inputmode="numeric"
+              />
+              <button id="allin-btn" class="ghost bet__allin" type="button">
+                All-in
+              </button>
+            </div>
+          </label>
+          <button id="deal-btn" type="button">Distribuer</button>
+          <button id="hit-btn" class="ghost" type="button" disabled>
+            Hit
+          </button>
+          <button id="stand-btn" class="ghost" type="button" disabled>
+            Stand
+          </button>
+          <button id="reset-btn" class="ghost" type="button">Nouveau jeu</button>
+          <button id="sfx-btn" class="ghost" type="button" aria-pressed="true">
+            SFX: ON
+          </button>
+        </section>
+
+        <footer class="footer">
+          Raccourcis: N = distribuer, H = hit, S = stand, R = reset.
+          Blackjack naturel paie 3:2.
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

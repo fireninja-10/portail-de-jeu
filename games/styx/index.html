@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Styx</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+      </nav>
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Clone original inspire de Qix (1983)</p>
+          <h1>STYX</h1>
+          <p class="tagline">
+            Jeu abstrait de capture de zones : ferme des surfaces, reviens sur
+            la zone sure, et ne laisse jamais le serpent toucher ta trace.
+          </p>
+        </div>
+
+        <aside class="hero-panel">
+          <div class="panel-block">
+            <span class="panel-label">Objectif</span>
+            <p>
+              Sors de la zone bleue, dessine une coupe, puis reconnecte-la pour
+              capturer de la surface. La campagne compte 20 niveaux avec des
+              objectifs et des serpents de plus en plus durs.
+            </p>
+          </div>
+
+          <div class="panel-block">
+            <span class="panel-label">Commandes</span>
+            <p>`WASD` ou fleches pour changer de direction. `P` ou `Echap` pour pause.</p>
+            <p>La zone bleue est sure. La trace orange est fragile tant qu'elle n'est pas fermee.</p>
+          </div>
+
+          <div class="button-row">
+            <button class="button button-primary" id="start-button" type="button">
+              Jouer
+            </button>
+            <button class="button button-secondary" id="pause-button" type="button">
+              Pause
+            </button>
+          </div>
+        </aside>
+      </header>
+
+      <main class="playfield-shell">
+        <section class="hud">
+          <div class="stat-card">
+            <span class="stat-label">Score</span>
+            <strong class="stat-value" id="stat-score">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Niveau</span>
+            <strong class="stat-value" id="stat-level">1 / 20</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Capture</span>
+            <strong class="stat-value" id="stat-capture">0%</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Vies</span>
+            <strong class="stat-value" id="stat-lives">3</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Trace</span>
+            <strong class="stat-value" id="stat-trace">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Record</span>
+            <strong class="stat-value" id="stat-highscore">0</strong>
+          </div>
+        </section>
+
+        <div class="status-bar">
+          <span id="status-text">Ferme une zone sans laisser le serpent toucher ta trace.</span>
+          <div class="mobile-controls">
+            <div class="touch-grid" aria-label="Controles tactiles">
+              <button class="touch-button" data-touch-dir="up" type="button">↑</button>
+              <button class="touch-button" data-touch-dir="left" type="button">←</button>
+              <button class="touch-button" data-touch-dir="down" type="button">↓</button>
+              <button class="touch-button" data-touch-dir="right" type="button">→</button>
+            </div>
+          </div>
+        </div>
+
+        <section class="canvas-frame">
+          <canvas
+            id="game"
+            width="960"
+            height="540"
+            aria-label="Jeu Styx"
+          ></canvas>
+          <div class="canvas-overlay" id="overlay"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>

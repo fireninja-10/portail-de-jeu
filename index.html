@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portail de jeu</title>
+    <meta
+      name="description"
+      content="Un portail pour parcourir et lancer les jeux HTML du projet."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Collection locale</p>
+        <div class="hero-copy">
+          <h1>Choisis un jeu et joue tout de suite.</h1>
+          <p class="hero-text">
+            Ce portail centralise maintenant toute la collection dans ce
+            projet. Chaque jeu est servi depuis un dossier interne normalise
+            pour simplifier la maintenance et preparer un futur deploiement.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="primary-action" href="#games">Voir les jeux</a>
+          <p class="hero-note">
+            10 jeux detectes, maintenant servis depuis ce portail. Quelques
+            assets volumineux restent a optimiser avant un deploiement public.
+          </p>
+        </div>
+      </header>
+
+      <main>
+        <section class="toolbar" aria-label="Filtres">
+          <label class="search">
+            <span>Rechercher</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Ex: tetris, arcade, strategie"
+            />
+          </label>
+          <div class="filter-group" role="group" aria-label="Categories">
+            <button class="chip is-active" data-filter="all" type="button">
+              Tous
+            </button>
+            <button class="chip" data-filter="arcade" type="button">
+              Arcade
+            </button>
+            <button class="chip" data-filter="plateau" type="button">
+              Plateau
+            </button>
+            <button class="chip" data-filter="casino" type="button">
+              Casino
+            </button>
+            <button class="chip" data-filter="sport" type="button">
+              Sport
+            </button>
+          </div>
+        </section>
+
+        <section id="games" class="games-grid" aria-live="polite">
+          <article
+            class="game-card"
+            data-category="sport arcade"
+            data-search="air hockey sport arcade duel palets"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Sport / Arcade</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Air Hockey</h2>
+            <p>
+              Duel rapide avec ambiance neon. Ideal pour une partie immediate a
+              deux.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Assets locaux simples</li>
+            </ul>
+            <a class="play-link" href="./games/air-hockey/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="casino"
+            data-search="blackjack casino cartes 21"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Casino</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Blackjack</h2>
+            <p>
+              Version HTML du classique 21 avec interface dediee et logique
+              separee.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Structure propre</li>
+            </ul>
+            <a class="play-link" href="./games/blackjack/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="plateau"
+            data-search="connect 4 puissance 4 plateau strategie"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Plateau</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Connect 4</h2>
+            <p>
+              Jeu de strategie au tour par tour. Le media de fond est maintenant
+              embarque localement dans le portail.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Media localise</li>
+            </ul>
+            <a class="play-link" href="./games/connect-4/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="plateau"
+            data-search="echecs chess strategie plateau"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Plateau</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Echecs</h2>
+            <p>
+              Le plus ambitieux de la collection. La version migree ne garde
+              que les fichiers utiles au jeu.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Cache exclu de la migration</li>
+            </ul>
+            <a class="play-link" href="./games/echecs/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="arcade"
+            data-search="flappy bird arcade reflexe score"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Arcade</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Flappy Bird</h2>
+            <p>
+              Reflexes, timing et score chase dans un format court et addictif.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Script principal simple</li>
+            </ul>
+            <a class="play-link" href="./games/flappy-bird/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="arcade"
+            data-search="geometry dash arcade plateforme rythme"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Arcade</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Geometry Dash</h2>
+            <p>
+              Plateforme nerveuse avec rythme eleve, bon exemple de jeu
+              standalone.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>README present</li>
+            </ul>
+            <a class="play-link" href="./games/geometry-dash/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="sport arcade"
+            data-search="pong arcade sport classique"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Sport / Arcade</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Pong</h2>
+            <p>
+              Variante plus riche avec dossier d'assets dedie. Le fichier HTML
+              est volumineux mais autonome.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Assets inclus</li>
+            </ul>
+            <a class="play-link" href="./games/pong/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="casino"
+            data-search="roulette casino hasard table"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Casino</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Roulette</h2>
+            <p>
+              Interface table de casino avec roue generee et logique JS
+              separee.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Base stable</li>
+            </ul>
+            <a class="play-link" href="./games/roulette/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="arcade"
+            data-search="styx arcade action"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Arcade</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Styx</h2>
+            <p>
+              Jeu d'action HTML avec sa propre identite et une structure
+              relativement claire.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>README present</li>
+            </ul>
+            <a class="play-link" href="./games/styx/index.html">Jouer</a>
+          </article>
+
+          <article
+            class="game-card"
+            data-category="arcade"
+            data-search="tetris arcade puzzle reflexion"
+          >
+            <div class="card-top">
+              <p class="game-kicker">Arcade / Puzzle</p>
+              <span class="status-pill migrated">Migre</span>
+            </div>
+            <h2>Tetris</h2>
+            <p>
+              Classique immediat a lancer, bien adapte a une collection de jeux
+              web.
+            </p>
+            <ul class="meta-list">
+              <li>Heberge dans ce projet</li>
+              <li>Structure simple</li>
+            </ul>
+            <a class="play-link" href="./games/tetris/index.html">Jouer</a>
+          </article>
+        </section>
+
+        <section class="roadmap">
+          <div>
+            <p class="eyebrow">Suite logique</p>
+            <h2>Portail maintenant autonome</h2>
+          </div>
+          <ol>
+            <li>Compresser les videos et gros assets avant publication.</li>
+            <li>Ajouter des apercus ou miniatures pour chaque jeu.</li>
+            <li>Prevoir une page detail ou un mode plein ecran commun.</li>
+            <li>Deployer ensuite le portail comme site statique unique.</li>
+          </ol>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+.DS_Store
+*.log
+
+games/**/.DS_Store
+games/**/.swift-cache/
+games/**/.tmp-frames/

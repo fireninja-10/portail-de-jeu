@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect 4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient-video-backdrop" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-left"></div>
+    <div class="ambient-orb ambient-orb-right"></div>
+    <div class="ambient-sun"></div>
+    <div class="ambient-grid"></div>
+    <div class="ambient-beams"></div>
+    <div class="ambient-scanlines"></div>
+  </div>
+
+  <nav class="portal-topbar" aria-label="Navigation du portail">
+    <a class="portal-return-link" href="../../index.html">← Retour a la liste des jeux</a>
+  </nav>
+  <button id="fullscreen-button" class="fullscreen-button" type="button">Plein écran</button>
+
+  <main class="app">
+    <section class="hero">
+      <p class="eyebrow">Arcade Neon</p>
+      <h1>Connect 4</h1>
+      <p class="subtitle">
+        Aligne 4 jetons dans une ambiance retro laser, entre soleil synthwave et borne d'arcade.
+      </p>
+    </section>
+
+    <section class="panel">
+      <div class="status-card">
+        <p class="label">Tour actuel</p>
+        <div class="player-indicator">
+          <span id="current-token" class="token token-red"></span>
+          <span id="current-player">Terminator</span>
+        </div>
+        <p id="status-message" class="status-message">Clique dans une colonne pour commencer.</p>
+        <p class="status-hint">Appuie sur <kbd>Espace</kbd> pour relancer la manche.</p>
+      </div>
+
+      <div class="scoreboard-card">
+        <p class="label">Score</p>
+        <div class="scoreboard">
+          <div id="score-item-red" class="score-item">
+            <div class="score-player">
+              <span class="token token-red"></span>
+              <span id="score-label-red">Terminator</span>
+            </div>
+            <strong id="score-red" class="score-value">0</strong>
+          </div>
+          <div id="score-item-yellow" class="score-item">
+            <div class="score-player">
+              <span class="token token-yellow"></span>
+              <span id="score-label-yellow">Ultimatum</span>
+            </div>
+            <strong id="score-yellow" class="score-value">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="control-stack">
+          <div class="mode-switch" aria-label="Mode de jeu">
+            <button id="single-player-button" class="reset-button mode-button" type="button">1 player</button>
+            <button id="two-player-button" class="reset-button mode-button secondary-button" type="button">2 joueurs</button>
+          </div>
+          <button id="reset-score-button" class="reset-button secondary-button" type="button">Reset points</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="board-section">
+      <div id="board" class="board" aria-label="Grille de Connect 4" role="grid"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
