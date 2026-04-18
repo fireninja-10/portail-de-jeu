@@ -5,6 +5,12 @@ const playerScoreNode = document.getElementById("player-score");
 const cpuScoreNode = document.getElementById("cpu-score");
 const leftLabelNode = document.getElementById("left-label");
 const rightLabelNode = document.getElementById("right-label");
+const playerNameButton = document.getElementById("player-name-button");
+const cpuNameButton = document.getElementById("cpu-name-button");
+const playerColorButton = document.getElementById("player-color-button");
+const cpuColorButton = document.getElementById("cpu-color-button");
+const playerColorInput = document.getElementById("player-color-input");
+const cpuColorInput = document.getElementById("cpu-color-input");
 const statusTextNode = document.getElementById("status-text");
 const startButton = document.getElementById("start-button");
 const modeToggle = document.getElementById("mode-toggle");
@@ -50,6 +56,7 @@ const colors = {
 
 const pointer = {
   active: false,
+  lockedByKeyboard: false,
   x: PLAYER_HOME_X,
   y: HOME_Y,
 };
@@ -95,6 +102,11 @@ const state = {
   matchStarted: false,
   winner: "",
   mode: "solo",
+  controlScheme: "mouse",
+  teamNames: {
+    left: "",
+    right: "",
+  },
   playerScore: 0,
   cpuScore: 0,
   faceoffTimer: 0,
@@ -137,17 +149,33 @@ function updateScoreboard() {
   cpuScoreNode.textContent = String(state.cpuScore);
 }
 
-function getLeftLabel() {
+function getDefaultLeftLabel() {
   return state.mode === "multi" ? "JOUEUR 1" : "JOUEUR";
 }
 
-function getRightLabel() {
+function getDefaultRightLabel() {
   return state.mode === "multi" ? "JOUEUR 2" : "CPU";
 }
 
-function syncModeUI() {
+function getLeftLabel() {
+  return state.teamNames.left || getDefaultLeftLabel();
+}
+
+function getRightLabel() {
+  return state.teamNames.right || getDefaultRightLabel();
+}
+
+function applyTeamStyles() {
   leftLabelNode.textContent = getLeftLabel();
   rightLabelNode.textContent = getRightLabel();
+  leftLabelNode.closest(".scoreboard-side")?.style.setProperty("--team-color", player.color);
+  rightLabelNode.closest(".scoreboard-side")?.style.setProperty("--team-color", cpu.color);
+  playerColorInput.value = player.color;
+  cpuColorInput.value = cpu.color;
+}
+
+function syncModeUI() {
+  applyTeamStyles();
   modeToggle.textContent = `Mode: ${state.mode === "multi" ? "Multi" : "Solo"}`;
   modeToggle.setAttribute("aria-pressed", String(state.mode === "multi"));
 }
@@ -156,10 +184,82 @@ function setStatus(text) {
   statusTextNode.textContent = text;
 }
 
+function getSoloControlsDescription() {
+  return state.controlScheme === "mouse"
+    ? "controle souris. Appuie sur E pour passer en WASD + fleches."
+    : "controle clavier avec WASD + fleches. Appuie sur E pour passer a la souris.";
+}
+
+function getPreMatchInstructions() {
+  if (state.mode === "multi") {
+    return "Avant le debut: J1 = WASD, J2 = fleches. Clique ou touche pour lancer.";
+  }
+
+  return `Avant le debut: ${getSoloControlsDescription()} Clique ou touche pour lancer.`;
+}
+
+function getActiveMatchStatus() {
+  if (state.mode === "multi") {
+    return "Multijoueur actif. J1 = WASD, J2 = fleches. La souris est desactivee.";
+  }
+
+  return state.controlScheme === "mouse"
+    ? "Solo actif. Controle a la souris a gauche. Appuie sur E pour passer au clavier."
+    : "Solo actif. Controle au clavier avec WASD + fleches. Appuie sur E pour revenir a la souris.";
+}
+
+function toggleSoloControlScheme() {
+  if (state.mode !== "solo") {
+    return;
+  }
+
+  state.controlScheme = state.controlScheme === "mouse" ? "keyboard" : "mouse";
+  pointer.active = false;
+  pointer.lockedByKeyboard = state.controlScheme === "keyboard";
+
+  if (!state.matchStarted || state.winner) {
+    setStatus(getPreMatchInstructions());
+    return;
+  }
+
+  setStatus(getActiveMatchStatus());
+}
+
 function setMode(mode) {
   state.mode = mode;
+  if (mode !== "solo") {
+    pointer.active = false;
+    pointer.lockedByKeyboard = true;
+  } else {
+    pointer.lockedByKeyboard = state.controlScheme === "keyboard";
+  }
   syncModeUI();
   beginMatch();
+}
+
+function renameTeam(side) {
+  const currentName = side === "left" ? getLeftLabel() : getRightLabel();
+  const nextName = window.prompt("Nouveau nom d'equipe", currentName);
+  if (nextName === null) {
+    return;
+  }
+
+  state.teamNames[side] = nextName.trim();
+  applyTeamStyles();
+}
+
+function setTeamColor(side, color) {
+  if (!/^#[0-9a-fA-F]{6}$/.test(color)) {
+    return;
+  }
+
+  if (side === "left") {
+    player.color = color;
+  } else {
+    cpu.color = color;
+  }
+
+  applyTeamStyles();
 }
 
 function setKeyState(code, pressed) {
@@ -191,6 +291,15 @@ function setKeyState(code, pressed) {
     default:
       return false;
   }
+}
+
+function disablePointerControlForKeyboard() {
+  if (state.mode !== "solo") {
+    return;
+  }
+
+  pointer.active = false;
+  pointer.lockedByKeyboard = true;
 }
 
 function getKeyboardVector(keys) {
@@ -303,11 +412,8 @@ function beginMatch() {
   resetMallets();
   positionPuckForFaceoff(Math.random() > 0.5 ? 1 : -1);
   syncModeUI();
-  setStatus(
-    state.mode === "multi"
-      ? "Multijoueur actif. J1 = WASD, J2 = fleches. La souris est desactivee."
-      : "Solo actif. WASD, fleches ou souris a gauche, CPU a droite.",
-  );
+  pointer.lockedByKeyboard = state.mode !== "solo" || state.controlScheme === "keyboard";
+  setStatus(getActiveMatchStatus());
 }
 
 function startIfNeeded() {
@@ -492,25 +598,35 @@ function moveMalletToward(mallet, targetX, targetY, speed, dt) {
   mallet.vy = (mallet.y - mallet.prevY) / Math.max(dt, 0.0001);
 }
 
+function stopMallet(mallet) {
+  mallet.x = mallet.x;
+  mallet.y = mallet.y;
+  mallet.prevX = mallet.x;
+  mallet.prevY = mallet.y;
+  mallet.vx = 0;
+  mallet.vy = 0;
+}
+
 function constrainMallet(mallet, leftLimit, rightLimit) {
   mallet.x = clamp(mallet.x, leftLimit + mallet.radius, rightLimit - mallet.radius);
   mallet.y = clamp(mallet.y, TABLE_MARGIN + mallet.radius, HEIGHT - TABLE_MARGIN - mallet.radius);
 }
 
 function updatePlayer(dt) {
-  const keyboardInput = getLeftPlayerKeyboardInput();
+  const keyboardInput = state.mode === "solo" && state.controlScheme === "mouse"
+    ? { x: 0, y: 0, active: false }
+    : getLeftPlayerKeyboardInput();
   const moveSpeed = state.mode === "multi" ? MULTI_PLAYER_SPEED : PLAYER_MALLET_SPEED;
 
   if (keyboardInput.active) {
+    disablePointerControlForKeyboard();
     moveMalletWithVector(player, keyboardInput, moveSpeed, dt);
   } else if (state.mode === "multi") {
-    // En multi, la palette s'arrête simplement quand aucune touche n'est pressée.
-  } else if (pointer.active) {
+    stopMallet(player);
+  } else if (pointer.active && !pointer.lockedByKeyboard) {
     moveMalletToward(player, pointer.x, pointer.y, moveSpeed, dt);
   } else {
-    pointer.x = lerp(pointer.x, PLAYER_HOME_X, 0.05);
-    pointer.y = lerp(pointer.y, HOME_Y, 0.05);
-    moveMalletToward(player, pointer.x, pointer.y, moveSpeed, dt);
+    stopMallet(player);
   }
 
   constrainMallet(player, TABLE_MARGIN, PLAYER_ZONE_RIGHT);
@@ -642,6 +758,8 @@ function updateOpponentHuman(dt) {
 
   if (keyboardInput.active) {
     moveMalletWithVector(cpu, keyboardInput, moveSpeed, dt);
+  } else {
+    stopMallet(cpu);
   }
 
   constrainMallet(cpu, CPU_ZONE_LEFT, WIDTH - TABLE_MARGIN);
@@ -700,20 +818,18 @@ function handleGoal(side) {
   if (side === "right") {
     state.playerScore += 1;
     state.nextServeDirection = 1;
-    emitBurst(WIDTH - TABLE_MARGIN - 26, HEIGHT / 2, colors.cyan, 26, [180, 600]);
+    emitBurst(WIDTH - TABLE_MARGIN - 26, HEIGHT / 2, player.color, 26, [180, 600]);
     playTone(820, 0.22, "sawtooth", 0.045, 320);
   } else {
     state.cpuScore += 1;
     state.nextServeDirection = -1;
-    emitBurst(TABLE_MARGIN + 26, HEIGHT / 2, colors.pink, 26, [180, 600]);
+    emitBurst(TABLE_MARGIN + 26, HEIGHT / 2, cpu.color, 26, [180, 600]);
     playTone(260, 0.24, "square", 0.04, 140);
   }
 
   updateScoreboard();
   if (state.playerScore >= WIN_SCORE || state.cpuScore >= WIN_SCORE) {
-    state.winner = state.mode === "multi"
-      ? (state.playerScore > state.cpuScore ? "JOUEUR 1" : "JOUEUR 2")
-      : (state.playerScore > state.cpuScore ? "JOUEUR" : "CPU");
+    state.winner = state.playerScore > state.cpuScore ? getLeftLabel() : getRightLabel();
     setStatus(`${state.winner} remporte la borne. Clique pour rejouer.`);
     return;
   }
@@ -722,9 +838,17 @@ function handleGoal(side) {
   positionPuckForFaceoff(state.nextServeDirection);
   state.running = true;
   if (state.mode === "multi") {
-    setStatus(side === "right" ? "JOUEUR 1 marque. Nouveau face-off." : "JOUEUR 2 marque. Nouveau face-off.");
+    setStatus(
+      side === "right"
+        ? `${getLeftLabel()} marque. Nouveau face-off.`
+        : `${getRightLabel()} marque. Nouveau face-off.`,
+    );
   } else {
-    setStatus(side === "right" ? "But pour toi. Nouveau face-off." : "L’IA marque dans ta cage. Repars vite.");
+    setStatus(
+      side === "right"
+        ? `${getLeftLabel()} marque. Nouveau face-off.`
+        : `${getRightLabel()} marque dans ta cage. Repars vite.`,
+    );
   }
 }
 
@@ -904,8 +1028,8 @@ function drawTable() {
   ctx.arc(WIDTH / 2, HEIGHT / 2, 28, 0, Math.PI * 2);
   ctx.stroke();
 
-  drawGoalMarks(TABLE_MARGIN, colors.cyan);
-  drawGoalMarks(WIDTH - TABLE_MARGIN, colors.pink);
+  drawGoalMarks(TABLE_MARGIN, player.color);
+  drawGoalMarks(WIDTH - TABLE_MARGIN, cpu.color);
   drawFaceoffSpot(FACE_OFF_PLAYER_X, FACE_OFF_TOP_Y);
   drawFaceoffSpot(FACE_OFF_PLAYER_X, FACE_OFF_BOTTOM_Y);
   drawFaceoffSpot(FACE_OFF_CPU_X, FACE_OFF_TOP_Y);
@@ -1035,8 +1159,10 @@ function drawOverlayText() {
     : state.faceoffTimer > 0
       ? `${Math.ceil(state.faceoffTimer)}`
       : state.mode === "multi"
-        ? "J1: WASD. J2: fleches."
-        : "Clique ou touche pour commencer. Tu joues a gauche avec WASD ou fleches.";
+        ? "Avant le debut: J1 = WASD, J2 = fleches."
+        : state.controlScheme === "mouse"
+          ? "Avant le debut: souris pour jouer. Appuie sur E pour passer en WASD + fleches."
+          : "Avant le debut: WASD + fleches pour jouer. Appuie sur E pour passer a la souris.";
 
   ctx.font = "800 54px 'Trebuchet MS', sans-serif";
   ctx.fillText(title, WIDTH / 2, HEIGHT / 2 - 44);
@@ -1071,13 +1197,21 @@ function frame(timestamp) {
 
 canvas.addEventListener("pointerdown", (event) => {
   canvas.setPointerCapture?.(event.pointerId);
-  pointer.active = true;
-  setPointerPosition(event.clientX, event.clientY);
+  const pointerAllowed = state.mode === "solo" && state.controlScheme === "mouse";
+  pointer.lockedByKeyboard = !pointerAllowed;
+  pointer.active = pointerAllowed;
+  if (pointerAllowed) {
+    setPointerPosition(event.clientX, event.clientY);
+  }
   startIfNeeded();
   ensureAudioContext();
 });
 
 canvas.addEventListener("pointermove", (event) => {
+  if (pointer.lockedByKeyboard || state.mode !== "solo" || state.controlScheme !== "mouse") {
+    return;
+  }
+
   pointer.active = true;
   setPointerPosition(event.clientX, event.clientY);
 });
@@ -1097,8 +1231,17 @@ canvas.addEventListener("pointercancel", (event) => {
 });
 
 window.addEventListener("keydown", (event) => {
+  if (event.code === "KeyE") {
+    toggleSoloControlScheme();
+    event.preventDefault();
+    return;
+  }
+
   if (!setKeyState(event.code, true)) {
     return;
+  }
+  if (state.mode !== "solo" || state.controlScheme === "keyboard") {
+    disablePointerControlForKeyboard();
   }
   event.preventDefault();
 });
@@ -1126,6 +1269,30 @@ modeToggle.addEventListener("click", () => {
   setMode(state.mode === "multi" ? "solo" : "multi");
 });
 
+playerNameButton.addEventListener("click", () => {
+  renameTeam("left");
+});
+
+cpuNameButton.addEventListener("click", () => {
+  renameTeam("right");
+});
+
+playerColorButton.addEventListener("click", () => {
+  playerColorInput.click();
+});
+
+cpuColorButton.addEventListener("click", () => {
+  cpuColorInput.click();
+});
+
+playerColorInput.addEventListener("input", () => {
+  setTeamColor("left", playerColorInput.value);
+});
+
+cpuColorInput.addEventListener("input", () => {
+  setTeamColor("right", cpuColorInput.value);
+});
+
 soundToggle.addEventListener("click", () => {
   audio.enabled = !audio.enabled;
   soundToggle.textContent = `Son: ${audio.enabled ? "ON" : "OFF"}`;
@@ -1141,9 +1308,7 @@ syncModeUI();
 resetMallets();
 resetPuck();
 setStatus(
-  state.mode === "multi"
-    ? "Mode multijoueur pret. J1 = WASD, J2 = fleches. La souris est desactivee."
-    : "Mode solo pret. WASD ou souris a gauche, CPU a droite. Clique sur Mode pour jouer a deux.",
+  `${getPreMatchInstructions()} Clique sur Mode pour jouer ${state.mode === "multi" ? "en solo" : "a deux"}.`,
 );
 render();
 requestAnimationFrame(frame);
