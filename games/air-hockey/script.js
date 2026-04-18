@@ -14,6 +14,7 @@ const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 const MALLET_RADIUS = 56;
 const TABLE_MARGIN = 32;
+const CORNER_DEPTH = 82;
 const GOAL_SIZE = 280;
 const GOAL_HALF = GOAL_SIZE / 2;
 const WIN_SCORE = 7;
@@ -28,6 +29,10 @@ const PLAYER_ZONE_RIGHT = WIDTH / 2 - CENTER_LANE_HALF;
 const CPU_ZONE_LEFT = WIDTH / 2 + CENTER_LANE_HALF;
 const PLAYER_HOME_X = WIDTH * 0.18;
 const CPU_HOME_X = WIDTH * 0.82;
+const FACE_OFF_TOP_Y = HEIGHT * 0.31;
+const FACE_OFF_BOTTOM_Y = HEIGHT * 0.69;
+const FACE_OFF_PLAYER_X = WIDTH * 0.24;
+const FACE_OFF_CPU_X = WIDTH * 0.76;
 const HOME_Y = HEIGHT / 2;
 const FRICTION = 0.994;
 const MAX_PUCK_SPEED = 1700;
@@ -94,6 +99,7 @@ const state = {
   cpuScore: 0,
   faceoffTimer: 0,
   nextServeDirection: 1,
+  puckLocked: false,
 };
 
 let lastTime = 0;
@@ -278,6 +284,7 @@ function resetPuck() {
   puck.vx = 0;
   puck.vy = 0;
   puck.trail.length = 0;
+  state.puckLocked = false;
 }
 
 function positionPuckForFaceoff(direction) {
@@ -318,10 +325,43 @@ function startIfNeeded() {
 function servePuck() {
   const speed = randomBetween(920, 1080);
   const spread = randomBetween(-190, 190);
+  state.puckLocked = false;
   puck.vx = speed * state.nextServeDirection;
   puck.vy = spread;
   playTone(520, 0.07, "triangle", 0.03, 900);
   setStatus("Échange lancé. Protège la gauche et vise la droite.");
+}
+
+function getFaceoffSpotsForSide(side) {
+  const x = side === "left" ? FACE_OFF_PLAYER_X : FACE_OFF_CPU_X;
+  return [
+    { x, y: FACE_OFF_TOP_Y },
+    { x, y: FACE_OFF_BOTTOM_Y },
+  ];
+}
+
+function isMalletBlockingSpot(mallet, spot) {
+  const clearance = mallet.radius + puck.radius + 12;
+  return length(mallet.x - spot.x, mallet.y - spot.y) < clearance;
+}
+
+function placeLockedPuckAtSide(side) {
+  const spots = getFaceoffSpotsForSide(side);
+  const sideMallet = side === "left" ? player : cpu;
+  const preferredIndex = Math.random() > 0.5 ? 1 : 0;
+  const preferredSpot = spots[preferredIndex];
+  const fallbackSpot = spots[preferredIndex === 0 ? 1 : 0];
+  const spawnSpot = isMalletBlockingSpot(sideMallet, preferredSpot) ? fallbackSpot : preferredSpot;
+
+  puck.x = spawnSpot.x;
+  puck.y = spawnSpot.y;
+  puck.vx = 0;
+  puck.vy = 0;
+  puck.trail.length = 0;
+  state.puckLocked = true;
+
+  emitBurst(puck.x, puck.y, colors.gold, 12, [160, 420]);
+  playTone(920, 0.08, "triangle", 0.03, 520);
 }
 
 function ensureAudioContext() {
@@ -482,11 +522,10 @@ function getPlayerGoalAimY() {
 }
 
 function isPuckInCorner() {
-  const cornerDepth = 120;
   const nearHorizontalEdge =
-    puck.x <= TABLE_MARGIN + cornerDepth || puck.x >= WIDTH - TABLE_MARGIN - cornerDepth;
+    puck.x <= TABLE_MARGIN + CORNER_DEPTH || puck.x >= WIDTH - TABLE_MARGIN - CORNER_DEPTH;
   const nearVerticalEdge =
-    puck.y <= TABLE_MARGIN + cornerDepth || puck.y >= HEIGHT - TABLE_MARGIN - cornerDepth;
+    puck.y <= TABLE_MARGIN + CORNER_DEPTH || puck.y >= HEIGHT - TABLE_MARGIN - CORNER_DEPTH;
 
   return nearHorizontalEdge && nearVerticalEdge;
 }
@@ -506,26 +545,12 @@ function teleportPuckFromCorner() {
   }
 
   const destinationSide = cornerSide === "left" ? "right" : "left";
-  const destinationX =
-    destinationSide === "right"
-      ? WIDTH - TABLE_MARGIN - puck.radius - 6
-      : TABLE_MARGIN + puck.radius + 6;
-  const destinationY = clamp(
-    HEIGHT / 2 + randomBetween(-110, 110),
-    TABLE_MARGIN + puck.radius + 14,
-    HEIGHT - TABLE_MARGIN - puck.radius - 14,
+  placeLockedPuckAtSide(destinationSide);
+  setStatus(
+    destinationSide === "left"
+      ? "Poque replacee sur une mise en jeu a gauche. Elle reste immobile jusqu'au contact."
+      : "Poque replacee sur une mise en jeu a droite. Elle reste immobile jusqu'au contact.",
   );
-  const launchDirection = destinationSide === "right" ? -1 : 1;
-  const launchSpeed = clamp(Math.max(length(puck.vx, puck.vy) * 0.95, 980), 980, 1500);
-
-  puck.x = destinationX;
-  puck.y = destinationY;
-  puck.vx = launchDirection * launchSpeed;
-  puck.vy = randomBetween(-220, 220);
-  puck.trail.length = 0;
-
-  emitBurst(puck.x, puck.y, colors.gold, 12, [220, 520]);
-  playTone(920, 0.08, "triangle", 0.03, 520);
   return true;
 }
 
@@ -636,6 +661,11 @@ function resolveMalletCollision(mallet) {
   const normalY = deltaY / distance;
   const overlap = minDistance - distance;
 
+  if (state.puckLocked) {
+    state.puckLocked = false;
+    setStatus("La poque est remise en jeu.");
+  }
+
   puck.x += normalX * overlap;
   puck.y += normalY * overlap;
 
@@ -704,6 +734,15 @@ function updatePuck(dt) {
     if (state.faceoffTimer <= 0) {
       servePuck();
     }
+    return;
+  }
+
+  if (state.puckLocked) {
+    puck.vx = 0;
+    puck.vy = 0;
+    puck.trail.length = 0;
+    resolveMalletCollision(player);
+    resolveMalletCollision(cpu);
     return;
   }
 
@@ -813,6 +852,22 @@ function drawGoalMarks(x, color) {
   ctx.restore();
 }
 
+function drawFaceoffSpot(x, y) {
+  ctx.save();
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(x, y, 40, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255, 209, 102, 0.24)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x, y, 12, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function drawTable() {
   const gradient = ctx.createLinearGradient(TABLE_MARGIN, 0, WIDTH - TABLE_MARGIN, 0);
   gradient.addColorStop(0, "#0e284f");
@@ -851,6 +906,10 @@ function drawTable() {
 
   drawGoalMarks(TABLE_MARGIN, colors.cyan);
   drawGoalMarks(WIDTH - TABLE_MARGIN, colors.pink);
+  drawFaceoffSpot(FACE_OFF_PLAYER_X, FACE_OFF_TOP_Y);
+  drawFaceoffSpot(FACE_OFF_PLAYER_X, FACE_OFF_BOTTOM_Y);
+  drawFaceoffSpot(FACE_OFF_CPU_X, FACE_OFF_TOP_Y);
+  drawFaceoffSpot(FACE_OFF_CPU_X, FACE_OFF_BOTTOM_Y);
 
   ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
   ctx.lineWidth = 2;
