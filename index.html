@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portail de jeu</title>
+    <title>Portail Retro Arcade</title>
     <meta
       name="description"
-      content="Un portail pour parcourir et lancer les jeux HTML du projet."
+      content="Une borne retro pour parcourir et lancer les jeux HTML du projet."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -20,20 +20,20 @@
   <body>
     <div class="page-shell">
       <header class="hero">
-        <p class="eyebrow">Collection locale</p>
+        <p class="eyebrow">Insert Coin</p>
         <div class="hero-copy">
-          <h1>Choisis un jeu et joue tout de suite.</h1>
+          <h1>Choisis ta cartouche et lance la partie.</h1>
           <p class="hero-text">
-            Ce portail centralise maintenant toute la collection dans ce
-            projet. Chaque jeu est servi depuis un dossier interne normalise
-            pour simplifier la maintenance et preparer un futur deploiement.
+            Une selection locale de classiques et de prototypes servis comme
+            dans une vieille salle d'arcade: acces direct, couleurs vives et
+            parties immediates sans installation.
           </p>
         </div>
         <div class="hero-actions">
-          <a class="primary-action" href="#games">Voir les jeux</a>
+          <a class="primary-action" href="#games">Lancer la selection</a>
           <p class="hero-note">
-            10 jeux detectes, maintenant servis depuis ce portail. Quelques
-            assets volumineux restent a optimiser avant un deploiement public.
+            10 bornes disponibles. Mode retro actif, filtres rapides et acces
+            direct a toute la collection.
           </p>
         </div>
       </header>
@@ -41,11 +41,11 @@
       <main>
         <section class="toolbar" aria-label="Filtres">
           <label class="search">
-            <span>Rechercher</span>
+            <span>Rechercher un jeu</span>
             <input
               id="searchInput"
               type="search"
-              placeholder="Ex: tetris, arcade, strategie"
+              placeholder="Ex: tetris, pong, casino"
             />
           </label>
           <div class="filter-group" role="group" aria-label="Categories">
@@ -281,13 +281,13 @@
         <section class="roadmap">
           <div>
             <p class="eyebrow">Suite logique</p>
-            <h2>Portail maintenant autonome</h2>
+            <h2>Prochaine partie</h2>
           </div>
           <ol>
-            <li>Compresser les videos et gros assets avant publication.</li>
-            <li>Ajouter des apercus ou miniatures pour chaque jeu.</li>
-            <li>Prevoir une page detail ou un mode plein ecran commun.</li>
-            <li>Deployer ensuite le portail comme site statique unique.</li>
+            <li>Ajouter des miniatures pixel pour chaque borne.</li>
+            <li>Prevoir un mode plein ecran commun a toute la collection.</li>
+            <li>Uniformiser les pages internes avec la meme ambiance arcade.</li>
+            <li>Publier ensuite le portail comme salle de jeu web unique.</li>
           </ol>
         </section>
       </main>
