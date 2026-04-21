@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Orchard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <nav class="portal-topbar" aria-label="Navigation du portail">
+        <a class="portal-return-link" href="../../index.html">← Retour au portail</a>
+      </nav>
+
+      <section class="hero-panel">
+        <p class="eyebrow">Arcade classique</p>
+        <h1>Snake Orchard</h1>
+        <p class="subtitle">
+          Mange les pommes, grandis et tiens le plus longtemps possible sans
+          toucher un mur ni ta queue.
+        </p>
+      </section>
+
+      <section class="layout" aria-label="Jeu Snake">
+        <aside class="sidebar">
+          <div class="panel">
+            <h2>Score</h2>
+            <div class="stats">
+              <div>
+                <span class="label">Points</span>
+                <strong id="score">0</strong>
+              </div>
+              <div>
+                <span class="label">Record</span>
+                <strong id="best-score">0</strong>
+              </div>
+              <div>
+                <span class="label">Pommes</span>
+                <strong id="apples">0</strong>
+              </div>
+              <div>
+                <span class="label">Vitesse</span>
+                <strong id="speed">1x</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Commandes</h2>
+            <ul class="controls-list">
+              <li><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> pour bouger</li>
+              <li><kbd>Z</kbd> <kbd>Q</kbd> <kbd>S</kbd> <kbd>D</kbd> aussi acceptes</li>
+              <li><kbd>Espace</kbd> pour lancer</li>
+              <li><kbd>P</kbd> pour pause</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="board-section">
+          <div class="board-frame">
+            <canvas
+              id="gameCanvas"
+              width="480"
+              height="480"
+              aria-label="Plateau du jeu Snake"
+            ></canvas>
+            <div class="overlay" id="overlay">
+              <div class="overlay-card">
+                <p class="overlay-tag">Pret ?</p>
+                <h2 id="overlay-title">Lance une partie</h2>
+                <p id="overlay-text">
+                  Attrape les pommes rouges pour allonger le serpent.
+                </p>
+                <button id="startButton" type="button">Jouer</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="sidebar">
+          <div class="panel">
+            <h2>Objectif</h2>
+            <p>
+              Chaque pomme te donne des points et accelere legerement la partie.
+              Plus tu survives, plus le plateau devient tendu.
+            </p>
+          </div>
+
+          <div class="panel action-panel">
+            <button id="pauseButton" type="button">Pause</button>
+            <button id="restartButton" type="button">Rejouer</button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="touch-controls" aria-label="Controles tactiles">
+        <button type="button" data-action="up">↑</button>
+        <div class="touch-row">
+          <button type="button" data-action="left">←</button>
+          <button type="button" data-action="down">↓</button>
+          <button type="button" data-action="right">→</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
